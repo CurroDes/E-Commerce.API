@@ -65,4 +65,44 @@ public class ProductService : IProductService
 
         return result;
     }
+
+    public async Task<Result> PutProductService(int id, ProductDTO p)
+    {
+        Result result = new Result();
+
+        result.Success = true;
+
+        try
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+
+            if (product.Id != p.IdProduct)
+            {
+                result.Success = false;
+                result.Error = $"Error al modificar el producto {p.NameProduct} con la cantidad de productos {p.Quantity}";
+                _logger.LogError(result.Error.ToString());
+
+                return result;
+            }
+
+            //Mapeamos la modificación del producto.
+            var productMapper = _productMapper.MapToPutProduct(product, p);
+
+            await _productRepository.ModifyProductNormalAsync(productMapper);
+            await _unitOfWork.SaveChangesAsync();
+
+            await _unitOfWork.CommitAsync();
+
+        }
+        catch (Exception ex)
+        {
+            result.Success = false;
+            result.Error = $"Error al modifcar el producto {p.NameProduct}";
+            _logger.LogError(ex.ToString(), result.Error.ToString());
+
+            await _unitOfWork.RollbackAsync();
+        }
+
+        return result;
+    }
 }

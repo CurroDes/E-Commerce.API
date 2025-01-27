@@ -24,8 +24,10 @@ public class OrderService : IOrderService
     private readonly IShoppingCartRepository<ShoppingCart> _shoppingCartRepository;
     private readonly ECommerceContext _context;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IProductRepository<Product> _productRepository;
     public OrderService(ShoppingCartMapper shoppingCartMapper, IUserRepository<User> userRepository, ILogger<OrderService> logger, OrderMapper orderMapper,
-        IOrderRepository<Order> orderRepository, IShoppingCartRepository<ShoppingCart> shoppingCartRepository, ECommerceContext context, IUnitOfWork unitOfWork)
+        IOrderRepository<Order> orderRepository, IShoppingCartRepository<ShoppingCart> shoppingCartRepository, ECommerceContext context, IUnitOfWork unitOfWork,
+        IProductRepository<Product> productRepository)
     {
         _shoppingCartMapper = shoppingCartMapper;
         _userRepository = userRepository;
@@ -35,6 +37,7 @@ public class OrderService : IOrderService
         _shoppingCartRepository = shoppingCartRepository;
         _context = context;
         _unitOfWork = unitOfWork;
+        _productRepository = productRepository;
     }
 
     public async Task<Result> AddCartUser(int id, OrderDTO o)
@@ -61,6 +64,7 @@ public class OrderService : IOrderService
             //Después de acabar la orden, montaremos el carrito para proceder a la compra.
             var shoppingCart = _shoppingCartMapper.CreateShoppingCart(o.DetallesPedidos, o.IdUser);
 
+
             if (shoppingCart == null)
             {
                 result.Success = false;
@@ -69,6 +73,9 @@ public class OrderService : IOrderService
 
                 return result;
             }
+
+
+            await _shoppingCartMapper.SubtractStockFromCart(o.DetallesPedidos);
 
             await _orderRepository.AddUserAsync(order);
             await _context.ShoppingCarts.AddRangeAsync(shoppingCart);

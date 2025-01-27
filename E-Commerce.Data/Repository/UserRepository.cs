@@ -29,7 +29,7 @@ public class UserRepository<T> : IUserRepository<T> where T : User
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id);
 
-        
+
     }
 
     public async Task<T> GetUserEmailAsync(string email)

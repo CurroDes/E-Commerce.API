@@ -37,5 +37,27 @@ namespace E_Commerce.API.Controllers
 
             return Ok();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProduct(int id, ProductDTO p)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result = await _productService.PutProductService(id, p);
+
+                if (!result.Success)
+                {
+                    return StatusCode(500, result.Error.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+
+            return Ok(result);
+        }
     }
 }

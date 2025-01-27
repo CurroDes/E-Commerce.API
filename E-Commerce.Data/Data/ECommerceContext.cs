@@ -46,7 +46,7 @@ public partial class ECommerceContext : DbContext
             entity.ToTable("Product");
 
             entity.Property(e => e.Description).HasMaxLength(500);
-            entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.RegistrationDate).HasColumnType("datetime");
         });
 

@@ -11,5 +11,6 @@ namespace E_Commerce.Application.Interfaces
     public interface IProductService
     {
         Task<Result> AddProductService(ProductDTO p);
+        Task<Result> PutProductService(int id, ProductDTO p);
     }
 }
