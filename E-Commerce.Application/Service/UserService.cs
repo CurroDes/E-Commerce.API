@@ -39,6 +39,19 @@ public class UserService : IUserService
         result.Success = true;
         try
         {
+            //Comprobar si el nuevo usuario ha indicado un correo ya existente.
+
+            var EmailUser = await _userRepository.CheckEmailAsync(u.Email);
+
+            if (EmailUser)
+            {
+                result.Success = false;
+                result.Error = $"Error al intentar registrarse {u.FirstName}, el correo que ha utilizado está en uso. Por favor, prueba con otro.";
+                _logger.LogError($"Error al intentar darse de alta {u.FirstName}, el correo electrónico {u.Email} ya está en uso");
+
+                return result;
+            }
+
             var userApp = _mapper.MapToUser(u);
 
             if (userApp == null)

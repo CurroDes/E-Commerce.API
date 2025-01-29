@@ -12,5 +12,6 @@ namespace E_Commerce.Data.Interfaces
         Task AddUserAsync(T userApp);
         Task<T> GetIdUserAsync(int id);
         Task<T> GetUserEmailAsync(string email);
+        Task<bool> CheckEmailAsync(string email);
     }
 }

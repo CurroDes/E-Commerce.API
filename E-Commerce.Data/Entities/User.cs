@@ -13,8 +13,6 @@ public partial class User
 
     public string? Email { get; set; }
 
-    public byte[]? Password { get; set; }
-
     public DateTime? RegistrationDate { get; set; }
 
     public DateTime? DateDrop { get; set; }

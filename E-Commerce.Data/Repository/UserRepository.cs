@@ -28,8 +28,6 @@ public class UserRepository<T> : IUserRepository<T> where T : User
         return await _context.Set<T>()
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id);
-
-
     }
 
     public async Task<T> GetUserEmailAsync(string email)
@@ -37,5 +35,19 @@ public class UserRepository<T> : IUserRepository<T> where T : User
         return await _context.Set<T>()
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Email == email);
+    }
+
+    public async Task<bool> CheckEmailAsync(string email)
+    {
+        try
+        {
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .AnyAsync(c => c.Email == email);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Error al verificar el correo electrónico.", ex);
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace E_Commerce.Application.Service
         public async Task<User> AuthenticationAsync(string email, string password)
         {
             var userApp = await _userRepository.GetUserEmailAsync(email);
-            if (userApp == null || password != _cryptoService.DecryptPassword(Encoding.ASCII.GetString(userApp.Password), "clave_de_cifrado"))
+            if (userApp == null || password != _cryptoService.DecryptPassword(Encoding.ASCII.GetString(userApp.PasswordHash), "clave_de_cifrado"))
             {
                 throw new Exception("Credenciales incorrectas");
             }

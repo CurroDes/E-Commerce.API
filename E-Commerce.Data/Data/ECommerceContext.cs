@@ -72,7 +72,6 @@ public partial class ECommerceContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(500);
             entity.Property(e => e.FirstName).HasMaxLength(500);
             entity.Property(e => e.LastName).HasMaxLength(500);
-            entity.Property(e => e.Password).HasMaxLength(1);
             entity.Property(e => e.RegistrationDate).HasColumnType("datetime");
         });
 

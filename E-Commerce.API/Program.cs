@@ -11,15 +11,15 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configura Serilog
+// Configurar Serilog
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
 builder.Host.UseSerilog(); // Usa Serilog para el registro de logs
+builder.Host.UseSerilog(); // Usa Serilog para el registro de logs
 
-// Add services to the container.
+// Resto de la configuración de servicios
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ECommerceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
-// Register services
+// Registro de servicios y repositorios
 builder.Services.AddScoped<UserMapper>();
 builder.Services.AddScoped<TokenMapper>();
 builder.Services.AddScoped<ProductMapper>();
@@ -50,7 +50,7 @@ builder.Services.AddScoped<IOrderRepository<Order>, OrderRepository<Order>>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuración del pipeline de solicitudes HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -59,7 +59,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); // Agrega autenticación
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
