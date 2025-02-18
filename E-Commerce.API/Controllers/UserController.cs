@@ -38,14 +38,14 @@ namespace E_Commerce.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id}/Login")]
-        public async Task<IActionResult> LoginUser(int id, AuthApiViewModelDTO a)
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginUser(AuthApiViewModelDTO a)
         {
             Result result = new Result();
 
             try
             {
-                result = await _userService.LoginUser(id, a);
+                result = await _userService.LoginUser(a);
 
                 if (!result.Success)
                 {

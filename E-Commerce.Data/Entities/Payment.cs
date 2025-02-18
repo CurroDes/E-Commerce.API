@@ -7,19 +7,19 @@ public partial class Payment
 {
     public int Id { get; set; }
 
-    public int CartId { get; set; }
+    public int? IdOrder { get; set; }
 
-    public int UserId { get; set; }
+    public int? IdUser { get; set; }
 
-    public string PaymentMethod { get; set; } = null!;
+    public decimal? TotalAmount { get; set; }
 
-    public decimal Amount { get; set; }
+    public int? CreditCard { get; set; }
 
-    public string PaymentStatus { get; set; } = null!;
+    public string? Cash { get; set; }
 
-    public string? TransactionId { get; set; }
+    public string? Bizum { get; set; }
 
-    public DateTime CreatedDate { get; set; }
+    public virtual Order? IdOrderNavigation { get; set; }
 
-    public virtual ShoppingCart Cart { get; set; } = null!;
+    public virtual User? IdUserNavigation { get; set; }
 }

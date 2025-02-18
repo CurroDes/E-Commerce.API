@@ -18,6 +18,8 @@ public partial class ECommerceContext : DbContext
 
     public virtual DbSet<Order> Orders { get; set; }
 
+    public virtual DbSet<Payment> Payments { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
@@ -36,7 +38,30 @@ public partial class ECommerceContext : DbContext
 
             entity.Property(e => e.DateOrder).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(500);
-            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.IdUser)
+                .HasConstraintName("FK_Orders_Users");
+        });
+
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC0766F10A99");
+
+            entity.ToTable("Payment");
+
+            entity.Property(e => e.Bizum).HasMaxLength(255);
+            entity.Property(e => e.Cash).HasMaxLength(255);
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.IdOrder)
+                .HasConstraintName("FK_Payment_Order");
+
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.IdUser)
+                .HasConstraintName("FK_Payment_User");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -57,7 +82,12 @@ public partial class ECommerceContext : DbContext
             entity.ToTable("ShoppingCart");
 
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.UnitAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Payment).HasMaxLength(10);
+            entity.Property(e => e.UnitAmount).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.ShoppingCarts)
+                .HasForeignKey(d => d.IdOrder)
+                .HasConstraintName("FK_ShoppingCart_Orders");
 
             entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.ShoppingCarts)
                 .HasForeignKey(d => d.IdProduct)

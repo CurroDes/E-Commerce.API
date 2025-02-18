@@ -11,6 +11,6 @@ namespace E_Commerce.Application.Interfaces
     public interface IUserService
     {
         Task<Result> AddUserService(UserDTO u);
-        Task<Result> LoginUser(int id, AuthApiViewModelDTO u);
+        Task<Result> LoginUser(AuthApiViewModelDTO u);
     }
 }

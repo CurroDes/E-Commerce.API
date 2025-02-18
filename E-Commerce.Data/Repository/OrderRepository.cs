@@ -22,5 +22,17 @@ namespace E_Commerce.Data.Repository
         {
             await _context.AddAsync(order);
         }
+
+        public async Task<bool> IsOrderPlacedByUserAsync(int idOrder, int idUser)
+        {
+            return await _context.Set<T>()
+                .AnyAsync(o => o.Id == idOrder && o.IdUser == idUser);
+        }
+
+        public async Task<Order> IsOrdenPayment(int idOrder)
+        {
+            return await _context.Set<T>()
+                .AnyAsync(o => o.Id == idOrder);
+        }
     }
 }

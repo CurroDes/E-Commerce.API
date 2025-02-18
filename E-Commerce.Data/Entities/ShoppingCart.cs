@@ -17,5 +17,9 @@ public partial class ShoppingCart
 
     public int? IdOrder { get; set; }
 
+    public string? Payment { get; set; }
+
+    public virtual Order? IdOrderNavigation { get; set; }
+
     public virtual Product? IdProductNavigation { get; set; }
 }

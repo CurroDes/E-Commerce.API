@@ -85,7 +85,7 @@ public class UserService : IUserService
         return result;
     }
 
-    public async Task<Result> LoginUser(int id, AuthApiViewModelDTO u)
+    public async Task<Result> LoginUser(AuthApiViewModelDTO u)
     {
         Result result = new Result();
         Token token = new Token();
@@ -94,9 +94,9 @@ public class UserService : IUserService
 
         try
         {
-            var userApp = await _userRepository.GetIdUserAsync(id);
+            var userApp = await _userRepository.GetUserEmailAsync(u.email);
 
-            if (userApp.Id != id)
+            if (userApp == null)
             {
                 result.Success = false;
                 result.Error = "Error, el id no cohincide al usuario correcto";

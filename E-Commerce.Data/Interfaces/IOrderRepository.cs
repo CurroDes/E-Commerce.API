@@ -10,5 +10,7 @@ namespace E_Commerce.Data.Interfaces
     public interface IOrderRepository<T> where T : Order
     {
         Task AddUserAsync(T order);
+        Task<bool> IsOrderPlacedByUserAsync(int idOrder, int idUser);
+        Task<bool> IsOrdenPayment(int idOrder);
     }
 }

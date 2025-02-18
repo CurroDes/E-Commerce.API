@@ -61,23 +61,23 @@ public class OrderService : IOrderService
             //Mapper la orden recibida con los productos del usuario:
             var order = _orderMapper.MapToOrder(userApp, o);
 
-            //Después de acabar la orden, montaremos el carrito para proceder a la compra.
-            var shoppingCart = _shoppingCartMapper.CreateShoppingCart(o.DetallesPedidos, o.IdUser);
+            await _orderRepository.AddUserAsync(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            await _shoppingCartMapper.SubtractStockFromCart(o.DetallesPedidos);
+
+            var shoppingCart = _shoppingCartMapper.CreateShoppingCart(o.DetallesPedidos, order);
+
 
 
             if (shoppingCart == null)
             {
                 result.Success = false;
-                result.Error = "Error al intentar añadir los productos en el carrito";
+                result.Error = "Error al intentar añadir los productos en e carrito";
                 _logger.LogError(result.Error.ToString());
 
                 return result;
             }
-
-
-            await _shoppingCartMapper.SubtractStockFromCart(o.DetallesPedidos);
-
-            await _orderRepository.AddUserAsync(order);
             await _context.ShoppingCarts.AddRangeAsync(shoppingCart);
             await _unitOfWork.SaveChangesAsync();
 
@@ -90,7 +90,7 @@ public class OrderService : IOrderService
         {
             result.Success = false;
             result.Error = "Error al intentar añadir los productos en el carrito";
-            _logger.LogError(result.Error.ToString());
+            _logger.LogError(ex.ToString(), result.Error.ToString());
             await _unitOfWork.RollbackAsync();
 
             return result;

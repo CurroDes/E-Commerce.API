@@ -8,6 +8,7 @@ namespace E_Commerce.Application.DTOs
 {
     public class OrderDTO
     {
+
         public int IdUser { get; set; }
         public Decimal TotalAmount { get; set; }
         public string Status { get; set; }

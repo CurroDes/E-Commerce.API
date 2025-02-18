@@ -14,4 +14,10 @@ public partial class Order
     public string? Status { get; set; }
 
     public DateTime? DateOrder { get; set; }
+
+    public virtual User? IdUserNavigation { get; set; }
+
+    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+    public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; } = new List<ShoppingCart>();
 }

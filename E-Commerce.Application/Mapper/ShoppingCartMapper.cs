@@ -33,14 +33,14 @@ public class ShoppingCartMapper
         };
     }
 
-    public IEnumerable<ShoppingCart> CreateShoppingCart(IEnumerable<ShoppingCartDTO> detalles, int idOrder)
+    public IEnumerable<ShoppingCart> CreateShoppingCart(IEnumerable<ShoppingCartDTO> detalles, Order o)
     {
         return detalles.Select(d => new ShoppingCart
         {
             Quantity = d.Quantity,
             UnitAmount = d.UnitAmount,
             IdProduct = d.IdProduct,
-            IdOrder = idOrder,
+            IdOrder = o.Id,
             CreatedDate = DateTime.Now
 
         });
