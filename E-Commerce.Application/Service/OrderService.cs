@@ -47,12 +47,12 @@ public class OrderService : IOrderService
         result.Success = true;
         try
         {
-            var userApp = await _userRepository.GetIdUserAsync(id);
+            var userApp = await _userRepository.GetIdUserAsync(o.IdUser);
 
             if (userApp.Id != id)
             {
                 result.Success = false;
-                result.Error = "El usuario no cohincide con él id de navegación";
+                result.Error = "El usuario no cohincide con el id de navegación";
                 _logger.LogError(result.Error.ToString());
 
                 return result;

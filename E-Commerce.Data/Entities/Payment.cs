@@ -19,6 +19,8 @@ public partial class Payment
 
     public string? Bizum { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual Order? IdOrderNavigation { get; set; }
 
     public virtual User? IdUserNavigation { get; set; }

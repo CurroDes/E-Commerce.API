@@ -33,6 +33,7 @@ builder.Services.AddScoped<TokenMapper>();
 builder.Services.AddScoped<ProductMapper>();
 builder.Services.AddScoped<ShoppingCartMapper>();
 builder.Services.AddScoped<OrderMapper>();
+builder.Services.AddScoped<PaymentMapper>();
 
 builder.Services.AddScoped<GenerateTokenService>();
 builder.Services.AddScoped<CryptoService>();
@@ -42,11 +43,13 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<IUserRepository<User>, UserRepository<User>>();
 builder.Services.AddScoped<IShoppingCartRepository<ShoppingCart>, ShoppingCartRepository<ShoppingCart>>();
 builder.Services.AddScoped<IProductRepository<Product>, ProductRepository<Product>>();
 builder.Services.AddScoped<IOrderRepository<Order>, OrderRepository<Order>>();
+builder.Services.AddScoped<IPaymentRepository<Payment>, PaymentRepository<Payment>>();
 
 var app = builder.Build();
 

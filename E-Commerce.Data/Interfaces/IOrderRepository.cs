@@ -11,6 +11,6 @@ namespace E_Commerce.Data.Interfaces
     {
         Task AddUserAsync(T order);
         Task<bool> IsOrderPlacedByUserAsync(int idOrder, int idUser);
-        Task<bool> IsOrdenPayment(int idOrder);
+
     }
 }

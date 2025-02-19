@@ -9,6 +9,6 @@ namespace E_Commerce.Data.Interfaces
 {
     public interface IPaymentRepository<T> where T : Payment
     {
-
+        Task AddPaymentAsync(T payment);
     }
 }

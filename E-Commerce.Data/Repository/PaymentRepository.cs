@@ -19,7 +19,7 @@ namespace E_Commerce.Data.Repository
 
         public async Task AddPaymentAsync(T payment)
         {
-            //Comprobamos si el idorden existe.
+            await _context.AddAsync(payment);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using E_Commerce.Data.Data;
 using E_Commerce.Data.Entities;
 using E_Commerce.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,31 @@ namespace E_Commerce.Data.Repository
         {
             await _context.Set<T>()
                 .AddRangeAsync(cart);
+        }
+
+        public async Task<T> IsOrdenCart(int cart)
+        {
+            return await _context.Set<T>()
+                .FirstOrDefaultAsync(o => o.IdOrder == cart);
+        }
+
+        public async Task ModifyCart(T shoppingCart)
+        {
+            _context.Entry(shoppingCart).State = EntityState.Modified;
+        }
+
+        public async Task<IEnumerable<T>> GetCartByOrderIdAsync(int orderId)
+        {
+            return await _context.Set<T>()
+                .Where(sc => sc.IdOrder == orderId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> UnPaidCartAsync(int idOrden)
+        {
+            return await _context.Set<T>()
+                .Where(s => s.IdOrder == idOrden && s.Payment.ToLower() != "pagado")
+                .ToListAsync();
         }
     }
 }

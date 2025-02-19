@@ -31,7 +31,12 @@ public class ProductMapper
 
     public Product MapToPutProduct(Product p, ProductDTO pd)
     {
-        p.Quantity = pd.Quantity;
+
+        if (p.Quantity != 0)
+        {
+            p.Quantity += pd.Quantity;
+        }
+
         p.Price = pd.Price;
 
         if (p.Quantity >= 1)

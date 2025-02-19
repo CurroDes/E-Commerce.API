@@ -53,6 +53,7 @@ public partial class ECommerceContext : DbContext
 
             entity.Property(e => e.Bizum).HasMaxLength(255);
             entity.Property(e => e.Cash).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(255);
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.Payments)

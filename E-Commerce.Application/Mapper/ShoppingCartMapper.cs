@@ -74,4 +74,24 @@ public class ShoppingCartMapper
         }
 
     }
+
+    public void MapToPaymentCart(IEnumerable<ShoppingCart> shoppingCarts)
+    {
+
+        if (shoppingCarts == null)
+        {
+            throw new ArgumentNullException(nameof(shoppingCarts));
+        }
+
+        foreach (var cart in shoppingCarts)
+        {
+            if (cart.Payment != null && cart.Payment.Equals("Pagado", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            cart.Payment = "Pagado";
+        }
+
+    }
 }

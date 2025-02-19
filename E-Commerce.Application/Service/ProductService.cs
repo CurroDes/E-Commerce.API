@@ -74,7 +74,7 @@ public class ProductService : IProductService
 
         try
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(p.IdProduct);
 
             if (product.Id != p.IdProduct)
             {
