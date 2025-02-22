@@ -14,6 +14,7 @@ namespace E_Commerce.Application.DTOs
         public int CreditCart { get; set; }
         public string Cash { get; set; }
         public string Bizum { get; set; }
+        public string Status { get; set; }
 
     }
 }

@@ -64,8 +64,10 @@ public class OrderService : IOrderService
             await _orderRepository.AddUserAsync(order);
             await _unitOfWork.SaveChangesAsync();
 
+            //Comprobamos que tenemos el stock suficiente para poder atender las necesidades de nuestros usuarios.
             await _shoppingCartMapper.SubtractStockFromCart(o.DetallesPedidos);
 
+            //Montamos el carrito antes de guardarlo en la BBDD:
             var shoppingCart = _shoppingCartMapper.CreateShoppingCart(o.DetallesPedidos, order);
 
 

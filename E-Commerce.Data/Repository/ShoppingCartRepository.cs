@@ -45,7 +45,7 @@ namespace E_Commerce.Data.Repository
         public async Task<IEnumerable<T>> UnPaidCartAsync(int idOrden)
         {
             return await _context.Set<T>()
-                .Where(s => s.IdOrder == idOrden && s.Payment.ToLower() != "pagado")
+                .Where(s => s.IdOrder == idOrden && s.Payment.ToLower() == "Pagado")
                 .ToListAsync();
         }
     }

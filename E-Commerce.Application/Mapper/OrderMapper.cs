@@ -25,5 +25,12 @@ namespace E_Commerce.Application.Mapper
                 DateOrder = DateTime.Now
             };
         }
+
+        public Order MapToStatusOrder(Order o)
+        {
+            o.Status = "Paid";
+
+            return o;
+        }
     }
 }

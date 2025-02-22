@@ -27,7 +27,7 @@ namespace E_Commerce.Application.Mapper
 
             foreach (var cart in shoppingCart)
             {
-                if (unpaidCarts == null)
+                if (!unpaidCarts.Any())
                 {
                     if (cart.UnitAmount.HasValue && cart.Quantity.HasValue)
                     {
@@ -39,6 +39,11 @@ namespace E_Commerce.Application.Mapper
             if (totalAmount == 0)
             {
                 paidStatus = "Este carrito ya ha sido pagado. Cobro cancelado";
+            }
+
+            if (totalAmount != 0)
+            {
+                paidStatus = "Paid";
             }
 
             return new Payment

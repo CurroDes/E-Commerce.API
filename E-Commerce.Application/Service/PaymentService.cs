@@ -24,9 +24,10 @@ namespace E_Commerce.Application.Service
         private readonly ShoppingCartMapper _shoppingCartMapper;
         private readonly IUnitOfWork _unitOfwork;
         private readonly IPaymentRepository<Payment> _paymentRepository;
+        private readonly OrderMapper _orderMapper;
 
         public PaymentService(PaymentMapper paymentMapper, ILogger<PaymentService> logger, IOrderRepository<Order> orderRepository, IShoppingCartRepository<ShoppingCart> shoppingCartRepository,
-            ShoppingCartMapper shoppingCartMapper, IUnitOfWork unitOfWork, IPaymentRepository<Payment> paymentRepository)
+            ShoppingCartMapper shoppingCartMapper, IUnitOfWork unitOfWork, IPaymentRepository<Payment> paymentRepository, OrderMapper orderMapper)
         {
             _paymentMapper = paymentMapper;
             _logger = logger;
@@ -35,6 +36,7 @@ namespace E_Commerce.Application.Service
             _shoppingCartMapper = shoppingCartMapper;
             _unitOfwork = unitOfWork;
             _paymentRepository = paymentRepository;
+            _orderMapper = orderMapper;
         }
 
         public async Task<Result> AddPaymentService(PaymentDTO p)
@@ -46,13 +48,14 @@ namespace E_Commerce.Application.Service
                 //Comprobar el usuario ligado a ese pago -desde el order?
                 var user = await _orderRepository.IsOrderPlacedByUserAsync(p.IdOrder, p.IdUser);
 
-                if (!user)
+                if (user == null)
                 {
                     result.Success = false;
                     result.Error = $"El usuario no se corresponde al pedido seleccionado";
                     _logger.LogError(result.Error.ToString());
                 }
 
+                //Comprobamos que los carrito de compras son los correctos:
                 var shoppingCart = await _shoppingCartRepository.GetCartByOrderIdAsync(p.IdOrder);
 
                 var paymentIsTrue = await _shoppingCartRepository.IsOrdenCart(p.IdOrder);
@@ -77,6 +80,14 @@ namespace E_Commerce.Application.Service
                     return result;
                 }
 
+                if (user != null)
+                {
+                    //Modificar el Order correspondiente de Pending a paid en Status.
+                    var paidOrder = _orderMapper.MapToStatusOrder(user);
+
+                    await _orderRepository.ModifyOrderAsync(paidOrder);
+                }
+
 
                 await _paymentRepository.AddPaymentAsync(payment);
 
@@ -89,7 +100,7 @@ namespace E_Commerce.Application.Service
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Error = $"Error al pagar";
+                result.Error = $"Error al pagar, Rollback sobre nuestra BBDD.";
                 _logger.LogError(ex.ToString(), result.Error.ToString());
 
                 await _unitOfwork.RollbackAsync();

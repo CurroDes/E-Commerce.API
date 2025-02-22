@@ -23,10 +23,15 @@ namespace E_Commerce.Data.Repository
             await _context.AddAsync(order);
         }
 
-        public async Task<bool> IsOrderPlacedByUserAsync(int idOrder, int idUser)
+        public async Task ModifyOrderAsync(T order)
+        {
+            _context.Entry(order).State = EntityState.Modified;
+        }
+
+        public async Task<T> IsOrderPlacedByUserAsync(int idOrder, int idUser)
         {
             return await _context.Set<T>()
-                .AnyAsync(o => o.Id == idOrder && o.IdUser == idUser);
+                .FirstOrDefaultAsync(o => o.Id == idOrder && o.IdUser == idUser);
         }
     }
 }
